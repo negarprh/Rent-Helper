@@ -3,6 +3,10 @@ DerivedData/
 *.xcuserdata/
 *.xccheckout
 *.xcscmblueprint
+# Xcode user-specific (never commit)
+xcuserdata/
+*.xcuserstate
+
 
 # Build
 build/
