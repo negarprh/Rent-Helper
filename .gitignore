@@ -15,4 +15,4 @@ build/
 .build/
 
 # Keep Firebase config
-# GoogleService-Info.plist
+GoogleService-Info.plist
