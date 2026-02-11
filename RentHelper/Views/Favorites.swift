@@ -1,3 +1,10 @@
+//
+//  Favorites.swift
+//  RentHelper
+//
+//  Created by Betty on 2026-02-09.
+//
+
 import SwiftUI
 import CoreData
 
