@@ -130,9 +130,3 @@ Run on simulator.
 * Naomi Pham
 
 ---
-
-# 📄 Academic Context
-
-Developed as part of an Information Systems implementation course, following structured iteration-based deliverables emphasizing architecture, persistence, and secure integration.
-
----
