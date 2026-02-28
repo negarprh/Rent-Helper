@@ -12,7 +12,7 @@ RentHelper is an iOS application that helps users find rental listings and save 
 
 ## Current Features (30% Deliverable)
 - User authentication (signup/login/logout)
-- Fetch rental listings from Firestore
+- Rental listings
 - View listing details
 - Save listings to favorites (CoreData)
 - Favorites persist after app restart
