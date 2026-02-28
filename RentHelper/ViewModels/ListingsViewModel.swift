@@ -29,5 +29,36 @@ final class ListingsViewModel: ObservableObject {
 
         isLoading = false
     }
-}
 
+    func startRealtimeUpdates() {
+        errorMessage = nil
+        if listings.isEmpty {
+            isLoading = true
+        }
+
+        service.startListingsListener { [weak self] result in
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+
+                switch result {
+                case .success(let listings):
+                    self.listings = listings
+                    self.errorMessage = nil
+                case .failure(let error):
+                    self.errorMessage = error.localizedDescription
+                }
+
+                self.isLoading = false
+            }
+        }
+    }
+
+    func stopRealtimeUpdates() {
+        service.stopListingsListener()
+    }
+
+    func retry() async {
+        await loadListings()
+        startRealtimeUpdates()
+    }
+}

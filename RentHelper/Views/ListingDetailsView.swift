@@ -21,6 +21,32 @@ struct ListingDetailsView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
+                if let imageUrl = listing.imageUrl,
+                   let url = URL(string: imageUrl) {
+                    AsyncImage(url: url) { phase in
+                        switch phase {
+                        case .empty:
+                            ProgressView()
+                                .frame(maxWidth: .infinity, minHeight: 200)
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .scaledToFill()
+                                .frame(maxWidth: .infinity, minHeight: 200, maxHeight: 200)
+                                .clipped()
+                                .cornerRadius(10)
+                        case .failure:
+                            Image(systemName: "photo")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(maxWidth: .infinity, minHeight: 200, maxHeight: 200)
+                                .foregroundStyle(.secondary)
+                        @unknown default:
+                            EmptyView()
+                        }
+                    }
+                }
+
                 Text(listing.title).font(.title2).bold()
                 Text("$\(listing.price, specifier: "%.0f")").font(.title3)
 
@@ -86,6 +112,7 @@ struct ListingDetailsView: View {
             fav.price = listing.price
             fav.address = listing.address
             fav.city = listing.city
+            fav.imageUrl = listing.imageUrl
             fav.savedAt = Date()
 
             try context.save()
@@ -98,7 +125,7 @@ struct ListingDetailsView: View {
     private func removeFavorite() {
         guard let userId = auth.user?.uid, !userId.isEmpty else { return }
 
-        let listingId = listing.id   // use .uuidString if UUID
+        let listingId = listing.id   
 
         let request: NSFetchRequest<FavoriteListing> = FavoriteListing.fetchRequest()
         request.fetchLimit = 1
@@ -133,4 +160,3 @@ struct ListingDetailsView: View {
         }
     }
 }
-

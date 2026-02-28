@@ -24,6 +24,10 @@ struct ContentView: View {
                     ListingsView()
                 }
 
+                Tab("Map", systemImage: "map") {
+                    ListingsMapView()
+                }
+
                 Tab("Favorites", systemImage: "heart") {
                     FavoritesView(userId: auth.user?.uid ?? "")
                 }

@@ -19,7 +19,7 @@ struct ListingsView: View {
                     VStack(spacing: 12) {
                         Text("Error: \(msg)")
                         Button("Retry") {
-                            Task { await vm.loadListings() }
+                            Task { await vm.retry() }
                         }
                     }
                 } else {
@@ -27,10 +27,25 @@ struct ListingsView: View {
                         NavigationLink {
                             ListingDetailsView(listing: listing)
                         } label: {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(listing.title).font(.headline)
-                                Text("$\(listing.price, specifier: "%.0f")").font(.subheadline)
-                                Text(listing.address).font(.caption)
+                            HStack(alignment: .top, spacing: 12) {
+                                if let imageUrl = listing.imageUrl,
+                                   let url = URL(string: imageUrl) {
+                                    AsyncImage(url: url) { image in
+                                        image
+                                            .resizable()
+                                            .scaledToFill()
+                                    } placeholder: {
+                                        Color.gray.opacity(0.2)
+                                    }
+                                    .frame(width: 80, height: 80)
+                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                                }
+
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(listing.title).font(.headline)
+                                    Text("$\(listing.price, specifier: "%.0f")").font(.subheadline)
+                                    Text(listing.address).font(.caption)
+                                }
                             }
                         }
                     }
@@ -39,6 +54,10 @@ struct ListingsView: View {
             .navigationTitle("Listings")
             .task {
                 await vm.loadListings()
+                vm.startRealtimeUpdates()
+            }
+            .onDisappear {
+                vm.stopRealtimeUpdates()
             }
         }
     }
