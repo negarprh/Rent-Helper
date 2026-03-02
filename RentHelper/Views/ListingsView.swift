@@ -5,13 +5,12 @@
 //  Created by Naomi on 2026-02-09.
 //
 
-
 import SwiftUI
 import CoreData
 import FirebaseAuth
 
 struct ListingsView: View {
-    
+
     @Environment(\.managedObjectContext) private var context
     @EnvironmentObject var auth: AuthService
 
@@ -28,8 +27,19 @@ struct ListingsView: View {
     @State private var minPrice: Double = 0
     @State private var maxPrice: Double = 5000
     @State private var selectedCity: String = "All"
-
     @State private var showFilters = false
+
+    // Auth user id
+    private var userId: String { auth.user?.uid ?? "" }
+
+    // show filled hearts instantly
+    private var favoriteIds: Set<String> {
+        Set(
+            favorites
+                .filter { $0.userId == userId }
+                .compactMap { $0.listingId }
+        )
+    }
 
     private var cityOptions: [String] {
         let cities = Set(vm.listings.map { $0.city }).sorted()
@@ -58,18 +68,6 @@ struct ListingsView: View {
         || maxPrice != 5000
         || selectedCity != "All"
     }
-    
-    private var userId: String {
-        auth.user?.uid ?? ""
-    }
-
-    private var favoriteIds: Set<String> {
-        Set(
-            favorites
-                .filter { $0.userId == userId }
-                .compactMap { $0.listingId }
-        )
-    }
 
     var body: some View {
         NavigationStack {
@@ -79,14 +77,11 @@ struct ListingsView: View {
                 } else if let msg = vm.errorMessage {
                     VStack(spacing: 12) {
                         Text("Error: \(msg)")
-                        Button("Retry") {
-                            Task { await vm.retry() }
-                        }
+                        Button("Retry") { Task { await vm.loadListings() } }
                     }
                 } else {
                     List {
                         Section {
-                            // List
                             ForEach(filteredListings) { listing in
                                 NavigationLink {
                                     ListingDetailsView(listing: listing)
@@ -95,26 +90,24 @@ struct ListingsView: View {
                                         if let imageUrl = listing.imageUrl,
                                            let url = URL(string: imageUrl) {
                                             AsyncImage(url: url) { image in
-                                                image
-                                                    .resizable()
-                                                    .scaledToFill()
+                                                image.resizable().scaledToFill()
                                             } placeholder: {
                                                 Color.gray.opacity(0.2)
                                             }
                                             .frame(width: 80, height: 80)
                                             .clipShape(RoundedRectangle(cornerRadius: 8))
                                         }
-
+                                        
                                         VStack(alignment: .leading, spacing: 4) {
                                             Text(listing.title).font(.headline)
                                             Text("$\(listing.price, specifier: "%.0f")").font(.subheadline)
                                             Text(listing.address).font(.caption)
                                             
+                                            // Heart under address
                                             HStack(spacing: 6) {
                                                 Image(systemName: favoriteIds.contains(listing.id) ? "heart.fill" : "heart")
                                                     .foregroundStyle(favoriteIds.contains(listing.id) ? .red : .secondary)
-                                                    .animation(.snappy, value: favoriteIds.contains(listing.id))
-
+                                                
                                                 if favoriteIds.contains(listing.id) {
                                                     Text("Saved")
                                                         .font(.caption)
@@ -124,13 +117,12 @@ struct ListingsView: View {
                                             .contentShape(Rectangle())
                                             .onTapGesture {
                                                 toggleFavoriteFromRow(listing)
-                                            
                                             }
                                         }
                                     }
                                 }
                             }
-
+                            
                             if filteredListings.isEmpty {
                                 ContentUnavailableView(
                                     "No results",
@@ -139,6 +131,7 @@ struct ListingsView: View {
                                 )
                                 .listRowSeparator(.hidden)
                             }
+                            
                         } header: {
                             SearchFilterHeader(
                                 searchText: $searchText,
@@ -155,7 +148,6 @@ struct ListingsView: View {
                     }
                     .listStyle(.plain)
                     .refreshable {
-                        vm.errorMessage = nil
                         await vm.loadListings()
                     }
                 }
@@ -170,7 +162,9 @@ struct ListingsView: View {
             }
         }
     }
-    
+
+    // MARK: - Favorites (CoreData)
+
     private func toggleFavoriteFromRow(_ listing: Listing) {
         guard !userId.isEmpty else { return }
 
@@ -180,31 +174,31 @@ struct ListingsView: View {
             saveFavoriteFromRow(listing)
         }
     }
-    
+
     private func saveFavoriteFromRow(_ listing: Listing) {
-            guard !userId.isEmpty else { return }
-            guard !favoriteIds.contains(listing.id) else { return }
+        guard !userId.isEmpty else { return }
+        guard !favoriteIds.contains(listing.id) else { return }
 
-            let fav = FavoriteListing(context: context)
-            fav.favoriteId = UUID().uuidString
-            fav.userId = userId
-            fav.listingId = listing.id
-            fav.title = listing.title
-            fav.price = listing.price
-            fav.address = listing.address
-            fav.city = listing.city
-            fav.lat = listing.lat
-            fav.long = listing.long
-            fav.imageUrl = listing.imageUrl
-            fav.savedAt = Date()
+        let fav = FavoriteListing(context: context)
+        fav.favoriteId = UUID().uuidString
+        fav.userId = userId
+        fav.listingId = listing.id
+        fav.title = listing.title
+        fav.price = listing.price
+        fav.address = listing.address
+        fav.city = listing.city
+        fav.lat = listing.lat
+        fav.long = listing.long
+        fav.imageUrl = listing.imageUrl
+        fav.savedAt = Date()
 
-            do {
-                try context.save()
-            } catch {
-                print("Save favorite from row error:", error)
-            }
+        do {
+            try context.save()
+        } catch {
+            print("Save favorite from row error:", error)
         }
-    
+    }
+
     private func removeFavoriteFromRow(_ listing: Listing) {
         guard !userId.isEmpty else { return }
 
@@ -219,6 +213,8 @@ struct ListingsView: View {
             print("Remove favorite from row error:", error)
         }
     }
+
+    // MARK: - Filters
 
     private func clearFilters() {
         searchText = ""
