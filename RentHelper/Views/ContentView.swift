@@ -23,6 +23,10 @@ struct ContentView: View {
                 Tab("Listings", systemImage: "house") {
                     ListingsView()
                 }
+                
+                Tab("Map", systemImage: "map") {
+                    ListingsMapView()
+                }
 
                 Tab("Map", systemImage: "map") {
                     ListingsMapView()
