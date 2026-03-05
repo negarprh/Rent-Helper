@@ -22,17 +22,17 @@ struct ListingsView: View {
 
     @StateObject private var vm = ListingsViewModel()
 
-
+   
     @State private var searchText = ""
     @State private var minPrice: Double = 0
     @State private var maxPrice: Double = 5000
     @State private var selectedCity: String = "All"
     @State private var showFilters = false
 
-
+    
     private var userId: String { auth.user?.uid ?? "" }
 
- 
+   
     private var favoriteIds: Set<String> {
         Set(
             favorites
@@ -162,7 +162,6 @@ struct ListingsView: View {
             }
         }
     }
-
 
     private func toggleFavoriteFromRow(_ listing: Listing) {
         guard !userId.isEmpty else { return }

@@ -23,7 +23,6 @@ struct SearchFilterHeader: View {
     var body: some View {
         VStack(spacing: 10) {
 
-            // Search  + Results
             HStack(spacing: 10) {
                 HStack(spacing: 8) {
                     Image(systemName: "magnifyingglass")
@@ -47,7 +46,6 @@ struct SearchFilterHeader: View {
                     .accessibilityLabel("\(resultsCount) results")
             }
 
-            // Filters button + Clear button
             HStack {
                 Button {
                     withAnimation(.easeInOut) {
@@ -68,7 +66,6 @@ struct SearchFilterHeader: View {
                 }
             }
 
-            // Collaps filters content
             if showFilters {
                 VStack(alignment: .leading, spacing: 10) {
 

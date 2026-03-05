@@ -48,7 +48,6 @@ struct FavoritesView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
-
             }
         }
     }
