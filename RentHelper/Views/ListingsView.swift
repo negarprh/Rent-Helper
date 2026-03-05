@@ -212,6 +212,8 @@ struct ListingsView: View {
         }
     }
 
+
+
     private func clearFilters() {
         searchText = ""
         minPrice = 0
