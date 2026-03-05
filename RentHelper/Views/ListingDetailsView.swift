@@ -3,7 +3,7 @@
 //  RentHelper
 //
 //  Created by Naomi on 2026-02-09.
-//  Modified by Betty 
+//  
 //
 
 import SwiftUI
@@ -125,7 +125,7 @@ struct ListingDetailsView: View {
     private func removeFavorite() {
         guard let userId = auth.user?.uid, !userId.isEmpty else { return }
 
-        let listingId = listing.id   
+        let listingId = listing.id
 
         let request: NSFetchRequest<FavoriteListing> = FavoriteListing.fetchRequest()
         request.fetchLimit = 1
