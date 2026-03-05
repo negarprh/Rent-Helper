@@ -22,17 +22,17 @@ struct ListingsView: View {
 
     @StateObject private var vm = ListingsViewModel()
 
-    // Search & filters
+
     @State private var searchText = ""
     @State private var minPrice: Double = 0
     @State private var maxPrice: Double = 5000
     @State private var selectedCity: String = "All"
     @State private var showFilters = false
 
-    // Auth user id
+
     private var userId: String { auth.user?.uid ?? "" }
 
-    // show filled hearts instantly
+ 
     private var favoriteIds: Set<String> {
         Set(
             favorites
@@ -163,7 +163,6 @@ struct ListingsView: View {
         }
     }
 
-    // MARK: - Favorites (CoreData)
 
     private func toggleFavoriteFromRow(_ listing: Listing) {
         guard !userId.isEmpty else { return }
@@ -214,7 +213,7 @@ struct ListingsView: View {
         }
     }
 
-    // MARK: - Filters
+
 
     private func clearFilters() {
         searchText = ""
