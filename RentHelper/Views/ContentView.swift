@@ -3,47 +3,36 @@
 //  RentHelper
 //
 //  Created by Negar Pirasteh on 2026-02-09.
+//  Edited by Naomi on 2026-03-02 
 //
+
 import SwiftUI
 import FirebaseAuth
 
 struct ContentView: View {
+
     @EnvironmentObject var auth: AuthService
-    
-//    @Environment(\.managedObjectContext) private var viewContext
-//
-//    @FetchRequest(
-//        sortDescriptors: [NSSortDescriptor(keyPath: \FavoriteListing.savedAt, ascending: false)],
-//        animation: .default
-//    )
-//    private var favorites: FetchedResults<FavoriteListing>
+    @State private var selectedTab: Int = 0
 
     var body: some View {
-            TabView {
-                Tab("Listings", systemImage: "house") {
-                    ListingsView()
-                }
-                
-                Tab("Map", systemImage: "map") {
-                    ListingsMapView()
-                }
 
-                Tab("Map", systemImage: "map") {
-                    ListingsMapView()
-                }
+        TabView(selection: $selectedTab) {
 
-                Tab("Favorites", systemImage: "heart") {
-                    FavoritesView(userId: auth.user?.uid ?? "")
-                }
+            Tab("Listings", systemImage: "house", value: 0) {
+                ListingsView()
+            }
 
-                Tab("Profile", systemImage: "person") {
-                    VStack(spacing: 16) {
-                        Text("Profile")
-                        Button("Logout") {
-                            auth.signOut { _ in }
-                        }
-                    }
-                }
+            Tab("Map", systemImage: "map", value: 1) {
+                ListingsMapView(selectedTab: $selectedTab)
+            }
+
+            Tab("Favorites", systemImage: "heart", value: 2) {
+                FavoritesView(userId: auth.user?.uid ?? "")
+            }
+
+            Tab("Profile", systemImage: "person", value: 3) {
+                ProfileView()
             }
         }
+    }
 }
