@@ -48,13 +48,6 @@ struct FavoritesView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
-
-       
-                // ToolbarItem(placement: .navigationBarTrailing) {
-                //     Button(action: addSampleFavorite) {
-                //         Label("Add Favorite", systemImage: "plus")
-                //     }
-                // }
             }
         }
     }
