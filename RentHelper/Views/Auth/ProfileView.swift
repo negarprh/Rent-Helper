@@ -45,6 +45,21 @@ struct ProfileView: View {
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
+                
+                NavigationLink{
+                    ChangePasswordView()
+                } label: {
+                    HStack {
+                        Image(systemName: "lock")
+                        Text("Change Password")
+                            .fontWeight(.semibold)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                }
+                .buttonStyle(.bordered)
+                .clipShape(Capsule())
+                .padding(.horizontal, 24)
 
                 Button {
                     auth.signOut { _ in }
