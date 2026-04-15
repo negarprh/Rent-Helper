@@ -1,376 +1,232 @@
-# 🏠 RentHelper - iOS Rental Listing Application
+# 🏠 RentHelper, iOS Rental Discovery App
 
-RentHelper is a **SwiftUI-based iOS application** that helps users discover rental properties, explore them on a map, and save favorite listings locally.
+RentHelper is a modern iOS application built with SwiftUI that simulates a real rental platform experience. The app allows users to explore listings, interact with landlords, and navigate properties through a clean and structured user journey.
 
-The project demonstrates a **modern hybrid mobile architecture** integrating:
-
-* 🔐 Firebase Authentication
-* ☁️ Firebase Firestore (Cloud Database)
-* 🖼 Firebase Storage (listing images)
-* 💾 CoreData (local favorites persistence)
-* 🧭 MVVM Architecture
-* 🗺 MapKit (interactive listing map)
-* 🔎 Search & filtering system
-* 💳 Stripe deposit system *(planned)*
-* 👤 User profile system *(planned)*
-
-The application is being built through **structured iterations**, gradually expanding from infrastructure setup to a fully featured rental browsing platform.
+This project focuses on delivering not just features, but a complete product experience with strong architecture, thoughtful UX decisions, and realistic workflows.
 
 ---
 
-# 📌 Project Overview
+## ✨ What is RentHelper
 
-RentHelper simulates a **real-world rental discovery platform** where users can:
+RentHelper is designed as a rental discovery platform where users can:
 
-* Create an account
-* Log in securely
-* Browse rental listings
-* View property details
-* Explore listings on an interactive map
-* Search and filter listings
-* Save favorite properties
-* Remove favorites
-* Persist favorites after app restart
+Browse rental listings from a cloud database
+View detailed property information
+Explore listings on a map
+Save favorite properties locally
+Contact landlords
+Schedule property visits
+Simulate reserving a unit with a deposit
 
-The architecture clearly separates responsibilities between cloud services and local persistence.
-
-| Component        | Purpose                   |
-| ---------------- | ------------------------- |
-| Firebase Auth    | User authentication       |
-| Firestore        | Rental listing data       |
-| Firebase Storage | Listing images            |
-| CoreData         | Favorite listings storage |
-| SwiftUI          | User interface            |
+The goal is to replicate how a real-world rental app behaves while maintaining clean design and scalable architecture.
 
 ---
 
-# 🏗 Architecture
+## 🧠 Core Idea
 
-RentHelper follows the **MVVM architecture pattern**.
+The app is built around a realistic user journey:
 
-```
-Views → ViewModels → Services → Firebase / CoreData
-```
+Browse → View → Contact → Schedule → Reserve
 
-### Views
-
-SwiftUI screens responsible for UI rendering:
-
-* Login
-* Signup
-* Listings
-* Listing Details
-* Favorites
-* Profile *(planned)*
-
-Navigation uses **NavigationStack + TabView**.
+Each feature is placed intentionally to reflect how users actually interact with rental platforms.
 
 ---
 
-### ViewModels
+## 🏗 Architecture
 
-ViewModels manage UI state and async data:
+The project follows the MVVM architecture pattern:
 
-* Fetch listings
-* Handle loading/error states
-* Sync Firestore updates
-* Manage filtering and search
+Views → ViewModels → Services → Data Sources
 
-Example:
+Views handle UI
+ViewModels manage logic and state
+Services handle Firebase and integrations
+Data sources include Firestore and CoreData
 
-```
-ListingsViewModel
-```
+This ensures clean separation of concerns and maintainable code.
 
 ---
 
-### Services
+## 🛠 Technologies
 
-Services handle all external integrations.
-
-**AuthService**
-
-* Firebase login
-* Signup
-* Logout
-* Session state
-
-**ListingService**
-
-* Fetch listings from Firestore
-* Listen for real-time updates
-* Decode listing data
+SwiftUI for UI
+Firebase Authentication for login system
+Firestore for listings data
+Firebase Storage for images
+CoreData for local favorites persistence
+MapKit for map-based exploration
+Stripe (publishable key only) for payment UI simulation
 
 ---
 
-### Persistence
+## 🚀 Key Features
 
-Favorites are stored locally using **CoreData**.
+🔐 Authentication
+Secure login and signup with Firebase
 
-Entity:
+🏠 Listings
+Dynamic listing feed with images, price, and location
 
-```
-FavoriteListing
-```
+📄 Listing Details
+Structured page with clear actions and clean layout
 
-Attributes include:
+❤️ Favorites
+Saved locally with CoreData and persisted across sessions
 
-* favoriteId
-* userId
-* listingId
-* title
-* price
-* address
-* city
-* lat
-* long
-* imageUrl
-* savedAt
+🗺 Map Exploration
+Listings displayed as pins with user location support
 
-Favorites remain saved even after restarting the app.
+📩 Contact Landlord
+Form-based communication flow
 
----
+📅 Book Visit
+Schedule viewing with date and time
 
-# ☁️ Firestore Listings
-
-Listings are stored in the Firestore collection:
-
-```
-listings
-```
-
-Each document contains:
-
-| Field       | Type   |
-| ----------- | ------ |
-| title       | String |
-| price       | Number |
-| address     | String |
-| city        | String |
-| lat         | Number |
-| long        | Number |
-| description | String |
-| imageUrl    | String |
-
-Listings are fetched using Firestore queries and decoded into Swift models.
+💳 Reserve Flow
+Stripe-based UI to simulate deposit payment
 
 ---
 
-# ⚡ Real-Time Firestore Updates
+## 🔁 Development Iterations
 
-The app uses:
+The project was built in progressive iterations to simulate real product development.
 
-```
-addSnapshotListener
-```
+### Iteration 1 - Foundation
 
-This enables **live database updates**.
+Project setup
+MVVM structure
+Firebase integration
+Navigation system
 
-When listings are added or modified in Firestore:
+### Iteration 2 - Core Functionality
 
-* The UI updates automatically
-* No refresh is required
+Authentication system
+Listings screen
+Listing details
+Firestore and storage integration
 
----
+### Iteration 3 - Data and Experience
 
-# 🗺 Map Integration
+Favorites with CoreData
+Real-time updates
+MapKit integration
+Search and filtering
 
-RentHelper includes a **MapKit-based map view** that visualizes listings geographically.
+### Iteration 4 - Product Completion
 
-Features:
-
-* Display listings as map pins
-* Click a pin to open listing details
-* Seamless navigation from map → listing page
-
-This allows users to explore rentals spatially.
-
----
-
-# 🔎 Search & Filtering
-
-Users can refine listings using:
-
-* Text search (title or address)
-* Price filtering
-* Dynamic list updates
-
-Filtering is handled inside the ViewModel and updates the UI instantly.
+Contact landlord flow
+Visit booking
+Payment simulation
+UI and UX refinement
 
 ---
 
-# 🖼 Listing Images
+## 📱 Application Screens
 
-Images are stored in **Firebase Storage**.
+All screens are located in the `Documentation/` folder.
 
-Workflow:
+### Main Application Experience
 
-```
-Firebase Storage → image URL → Firestore → SwiftUI AsyncImage
-```
+**Listings Screen (Main Page)**
+![Listings](Documentation/mainpage.png)
 
-Each listing document contains an `imageUrl` referencing the stored image.
+**Listing Details**
+![Listing Details](Documentation/listingdetails.png)
 
-Images are rendered using:
+**Map View**
+![Map](Documentation/map1.png)
 
-```
-AsyncImage
-```
-
----
-
-# ❤️ Favorites System
-
-Users can:
-
-* Save listings as favorites
-* Remove favorites
-* View saved favorites in a dedicated screen
-
-Favorites are stored in **CoreData** to ensure:
-
-* Fast access
-* Offline availability
-* Persistence after app restart
+![Map 2](Documentation/map2.png)
 
 ---
 
-# 🔁 Iteration Development
+### User Actions
 
-The project is developed through structured iterations.
+**Contact Landlord, Book Visit**
+![Contact](Documentation/contact.png)
 
----
-
-## 🟢 Iteration 1 - Project Infrastructure
-
-Focus: Establish architecture and Firebase integration.
-
-Implemented:
-
-* SwiftUI project setup
-* MVVM folder structure
-* Firebase configuration
-* Firestore initialization
-* Authentication setup
-* CoreData stack
-* App navigation
+**Deposit Payment**
+![Payment](Documentation/payment.png)
 
 ---
 
-## 🟡 Iteration 2 - Listings & Authentication
+### User Personalization
 
-Focus: Enable secure login and listing browsing.
+**Favorites**
+![Favorites](Documentation/favorite.png)
 
-Implemented:
-
-* Signup / login / logout
-* Listings screen
-* Listing details screen
-* Firestore listing structure
-* Firebase Storage images
+**Profile Screen**
+![Profile](Documentation/profile.png)
 
 ---
 
-## 🔵 Iteration 3 - Favorites, Map & Filtering
+### Authentication
 
-Focus: Improve user experience and data persistence.
+**Login Screen**
+![Login](Documentation/login.png)
 
-Implemented:
-
-* Real Firestore listing fetch
-* Real-time database updates
-* MapKit listing map
-* Search and filtering
-* Save/remove favorites
-* Favorites persistence via CoreData
+**Sign Up Screen**
+![Signup](Documentation/signin.png)
 
 ---
 
-# 🔐 Security Notes
+### Additional Screens
 
-* `GoogleService-Info.plist` is **not committed to GitHub**
-* Firestore rules restrict write access
-* Stripe secret keys will **never be stored in the client**
-* Favorites remain local for privacy and performance
+**Change Password**
+![Change Password](Documentation/changepassword.png)
 
 ---
 
-# 🛠 Tech Stack
+## ▶️ Running the Project
 
-| Layer             | Technology               |
-| ----------------- | ------------------------ |
-| UI                | SwiftUI                  |
-| Architecture      | MVVM                     |
-| Authentication    | Firebase Auth            |
-| Database          | Firestore                |
-| Image Storage     | Firebase Storage         |
-| Maps              | MapKit                   |
-| Local Persistence | CoreData                 |
-| Filtering         | SwiftUI state management |
-| Payments          | Stripe *(planned)*       |
-
----
-
-# 🚀 How to Run
-
-### 1️⃣ Clone the Repository
+Clone the repository:
 
 ```bash
 git clone https://github.com/negarprh/Rent-Helper.git
 cd Rent-Helper
 ```
 
----
+Set up Firebase:
 
-### 2️⃣ Firebase Setup
+Create a Firebase project
+Enable Authentication
+Enable Firestore
+Enable Storage
+Download and add `GoogleService-Info.plist`
 
-1. Create Firebase project
-2. Add iOS application
-3. Enable:
-
-* Email/Password Authentication
-* Firestore Database
-* Firebase Storage
-
-4. Download:
-
-```
-GoogleService-Info.plist
-```
-
-5. Add it to the Xcode project.
+Open the project in Xcode and run on a simulator.
 
 ---
 
-### 3️⃣ Open the Project
+## 🔐 Security
 
-Open:
-
-```
-RentHelper.xcodeproj
-```
-
-Run on simulator.
+Stripe secret keys are not used
+Payment flow is simulated
+Sensitive configuration is excluded
+Firebase rules control access
 
 ---
 
-# 👩‍💻 Team
+## 🔮 Future Improvements
 
-* Negar Pirasteh
-* Betty Dang
-* Naomi Pham
+Backend integration for real payments
+Real-time messaging system
+Push notifications
+Cloud-synced favorites
+Advanced filters and recommendations
 
 ---
 
-# 🔮 Future Improvements
+## 👩‍💻 Team
 
-Upcoming features include:
+Negar Pirasteh
+Betty Dang
+Ngoc Yen Nhi Pham
 
-* 💳 Stripe rent deposit system
-* 👤 User profile system
-* Advanced map interactions
-* Push notifications
-* Cloud-synced favorites
-* Listing creation interface
+---
+
+## 📌 Final Note
+
+RentHelper demonstrates how to build a complete mobile product from scratch using modern iOS technologies. The project highlights strong architectural decisions, realistic feature design, and a clear understanding of user experience.
 
 ---
