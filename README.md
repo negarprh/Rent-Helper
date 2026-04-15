@@ -49,13 +49,13 @@ This ensures clean separation of concerns and maintainable code.
 
 ## 🛠 Technologies
 
-SwiftUI for UI
-Firebase Authentication for login system
-Firestore for listings data
-Firebase Storage for images
-CoreData for local favorites persistence
-MapKit for map-based exploration
-Stripe (publishable key only) for payment UI simulation
+- SwiftUI for UI
+- Firebase Authentication for login system
+- Firestore for listings data
+- Firebase Storage for images
+- CoreData for local favorites persistence
+- MapKit for map-based exploration
+- Stripe (publishable key only) for payment UI simulation
 
 ---
 
@@ -123,57 +123,83 @@ UI and UX refinement
 
 ## 📱 Application Screens
 
-All screens are located in the `Documentation/` folder.
+Screens are available in the `Documentation/` folder.
 
-### Main Application Experience
+### Core Experience
 
-**Listings Screen (Main Page)**
-![Listings](Documentation/mainpage.png)
-
-**Listing Details**
-![Listing Details](Documentation/listingdetails.png)
-
-**Map View**
-![Map](Documentation/map1.png)
-
-![Map 2](Documentation/map2.png)
+<table>
+<tr>
+<td align="center"><b>Listings</b></td>
+<td align="center"><b>Details</b></td>
+<td align="center"><b>Map View</b></td>
+<td align="center"><b>Clicking on one listing on the Map</b></td>
+</tr>
+<tr>
+<td><img src="Documentation/mainpage.png" width="200"/></td>
+<td><img src="Documentation/listingdetails.png" width="200"/></td>
+<td>
+<img src="Documentation/map1.png" width="200"/></td>
+<td><img src="Documentation/map2.png" width="200"/></td>
+</tr>
+</table>
 
 ---
 
 ### User Actions
 
-**Contact Landlord, Book Visit**
-![Contact](Documentation/contact.png)
-
-**Deposit Payment**
-![Payment](Documentation/payment.png)
+<table>
+<tr>
+<td align="center"><b>Contact & Visit</b></td>
+<td align="center"><b>Deposit</b></td>
+</tr>
+<tr>
+<td><img src="Documentation/contact.png" width="200"/></td>
+<td><img src="Documentation/payment.png" width="200"/></td>
+</tr>
+</table>
 
 ---
 
-### User Personalization
+### Personalization
 
-**Favorites**
-![Favorites](Documentation/favorite.png)
-
-**Profile Screen**
-![Profile](Documentation/profile.png)
+<table>
+<tr>
+<td align="center"><b>Favorites</b></td>
+<td align="center"><b>Profile</b></td>
+</tr>
+<tr>
+<td><img src="Documentation/favorite.png" width="200"/></td>
+<td><img src="Documentation/profile.png" width="200"/></td>
+</tr>
+</table>
 
 ---
 
 ### Authentication
 
-**Login Screen**
-![Login](Documentation/login.png)
-
-**Sign Up Screen**
-![Signup](Documentation/signin.png)
+<table>
+<tr>
+<td align="center"><b>Login</b></td>
+<td align="center"><b>Sign Up</b></td>
+</tr>
+<tr>
+<td><img src="Documentation/login.png" width="200"/></td>
+<td><img src="Documentation/signin.png" width="200"/></td>
+</tr>
+</table>
 
 ---
 
-### Additional Screens
+### Settings
 
-**Change Password**
-![Change Password](Documentation/changepassword.png)
+<table>
+<tr>
+<td align="center"><b>Change Password</b></td>
+</tr>
+<tr>
+<td><img src="Documentation/changepassword.png" width="200"/></td>
+</tr>
+</table>
 
 ---
 
@@ -207,21 +233,11 @@ Firebase rules control access
 
 ---
 
-## 🔮 Future Improvements
-
-Backend integration for real payments
-Real-time messaging system
-Push notifications
-Cloud-synced favorites
-Advanced filters and recommendations
-
----
-
 ## 👩‍💻 Team
 
-Negar Pirasteh
-Betty Dang
-Ngoc Yen Nhi Pham
+- Negar Pirasteh
+- Betty Dang
+- Ngoc Yen Nhi Pham
 
 ---
 
