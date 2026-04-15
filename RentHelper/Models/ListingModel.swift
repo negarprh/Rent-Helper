@@ -4,7 +4,6 @@
 //
 //  Created by Betty Dang on 2026-02-09.
 //
-
 import Foundation
 
 struct Listing: Identifiable {

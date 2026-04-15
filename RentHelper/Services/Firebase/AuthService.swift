@@ -4,7 +4,6 @@
 //
 //  Created by Negar Pirasteh on 2026-02-09.
 //
-
 import Foundation
 import Combine
 import FirebaseAuth
@@ -27,6 +26,12 @@ final class AuthService: ObservableObject {
 
     func signIn(email: String, password: String, completion: @escaping (String?) -> Void) {
         Auth.auth().signIn(withEmail: email, password: password) { _, error in
+            completion(error?.localizedDescription)
+        }
+    }
+
+    func sendPasswordReset(email: String, completion: @escaping (String?) -> Void) {
+        Auth.auth().sendPasswordReset(withEmail: email) { error in
             completion(error?.localizedDescription)
         }
     }

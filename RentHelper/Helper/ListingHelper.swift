@@ -4,7 +4,6 @@
 //
 //  Created by Betty Dang on 2026-02-10.
 //
-
 import Foundation
 
 extension Listing {

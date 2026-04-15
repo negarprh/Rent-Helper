@@ -15,6 +15,12 @@ final class ListingService {
         return decodeListings(from: snapshot)
     }
 
+    func fetchListing(by id: String) async throws -> Listing? {
+        let document = try await db.collection("listings").document(id).getDocument()
+        guard let data = document.data() else { return nil }
+        return mapListingManually(documentId: document.documentID, data: data)
+    }
+
     func startListingsListener(
         onUpdate: @escaping (Result<[Listing], Error>) -> Void
     ) {

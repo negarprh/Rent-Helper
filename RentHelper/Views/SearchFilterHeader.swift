@@ -4,7 +4,6 @@
 //
 //  Created by Betty Dang on 2026-03-01.
 //
-
 import SwiftUI
 
 struct SearchFilterHeader: View {
@@ -21,12 +20,12 @@ struct SearchFilterHeader: View {
     let onClear: () -> Void
 
     var body: some View {
-        VStack(spacing: 10) {
+        VStack(spacing: 12) {
 
             HStack(spacing: 10) {
                 HStack(spacing: 8) {
                     Image(systemName: "magnifyingglass")
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(AppTheme.accent)
 
                     TextField("Search title or address", text: $searchText)
                         .textInputAutocapitalization(.never)
@@ -34,14 +33,15 @@ struct SearchFilterHeader: View {
                 }
                 .padding(.horizontal, 12)
                 .padding(.vertical, 10)
-                .background(.thinMaterial)
+                .background(.white.opacity(0.92))
                 .clipShape(Capsule())
 
                 Text("\(resultsCount)")
                     .font(.subheadline)
+                    .fontWeight(.semibold)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 6)
-                    .background(.thinMaterial)
+                    .background(AppTheme.accentSoft)
                     .clipShape(Capsule())
                     .accessibilityLabel("\(resultsCount) results")
             }
@@ -55,6 +55,7 @@ struct SearchFilterHeader: View {
                     Label("Filters", systemImage: "line.3.horizontal.decrease.circle")
                 }
                 .buttonStyle(.bordered)
+                .tint(AppTheme.accent)
 
                 Spacer()
 
@@ -63,6 +64,7 @@ struct SearchFilterHeader: View {
                         onClear()
                     }
                     .buttonStyle(.bordered)
+                    .tint(AppTheme.danger)
                 }
             }
 
@@ -109,7 +111,13 @@ struct SearchFilterHeader: View {
                 .padding(.top, 2)
             }
         }
-        .padding(.horizontal)
-        .padding(.vertical, 10)
+        .padding(.horizontal, 14)
+        .padding(.vertical, 12)
+        .background(AppTheme.cardBackground, in: RoundedRectangle(cornerRadius: 18))
+        .overlay(
+            RoundedRectangle(cornerRadius: 18)
+                .stroke(Color.white.opacity(0.8), lineWidth: 1)
+        )
+        .shadow(color: Color.black.opacity(0.08), radius: 12, y: 6)
     }
 }

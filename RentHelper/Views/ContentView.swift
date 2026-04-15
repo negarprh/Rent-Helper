@@ -5,7 +5,6 @@
 //  Created by Negar Pirasteh on 2026-02-09.
 //  Edited by Naomi on 2026-03-02 
 //
-
 import SwiftUI
 import FirebaseAuth
 
@@ -23,7 +22,7 @@ struct ContentView: View {
             }
 
             Tab("Map", systemImage: "map", value: 1) {
-                ListingsMapView(selectedTab: $selectedTab)
+                ListingsMapView()
             }
 
             Tab("Favorites", systemImage: "heart", value: 2) {
@@ -34,5 +33,8 @@ struct ContentView: View {
                 ProfileView()
             }
         }
+        .tint(AppTheme.accent)
+        .toolbarBackground(.visible, for: .tabBar)
+        .toolbarBackground(Color.white.opacity(0.96), for: .tabBar)
     }
 }

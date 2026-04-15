@@ -13,4 +13,16 @@
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="userId" optional="YES" attributeType="String"/>
     </entity>
+    <entity name="DepositedListing" representedClassName="DepositedListing" syncable="YES" codeGenerationType="class">
+        <attribute name="address" optional="YES" attributeType="String"/>
+        <attribute name="city" optional="YES" attributeType="String"/>
+        <attribute name="depositAmount" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="depositId" optional="YES" attributeType="String"/>
+        <attribute name="imageUrl" optional="YES" attributeType="String"/>
+        <attribute name="listingId" optional="YES" attributeType="String"/>
+        <attribute name="paidAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="status" optional="YES" attributeType="String"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="userId" optional="YES" attributeType="String"/>
+    </entity>
 </model>

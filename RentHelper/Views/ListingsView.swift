@@ -4,7 +4,6 @@
 //
 //  Created by Naomi on 2026-02-09.
 //
-
 import SwiftUI
 import CoreData
 import FirebaseAuth
@@ -71,88 +70,74 @@ struct ListingsView: View {
 
     var body: some View {
         NavigationStack {
-            Group {
-                if vm.isLoading {
-                    ProgressView("Loading listings...")
-                } else if let msg = vm.errorMessage {
-                    VStack(spacing: 12) {
-                        Text("Error: \(msg)")
-                        Button("Retry") { Task { await vm.loadListings() } }
-                    }
-                } else {
-                    List {
-                        Section {
-                            ForEach(filteredListings) { listing in
-                                NavigationLink {
-                                    ListingDetailsView(listing: listing)
-                                } label: {
-                                    HStack(alignment: .top, spacing: 12) {
-                                        if let imageUrl = listing.imageUrl,
-                                           let url = URL(string: imageUrl) {
-                                            AsyncImage(url: url) { image in
-                                                image.resizable().scaledToFill()
-                                            } placeholder: {
-                                                Color.gray.opacity(0.2)
-                                            }
-                                            .frame(width: 80, height: 80)
-                                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                                        }
-                                        
-                                        VStack(alignment: .leading, spacing: 4) {
-                                            Text(listing.title).font(.headline)
-                                            Text("$\(listing.price, specifier: "%.0f")").font(.subheadline)
-                                            Text(listing.address).font(.caption)
-                                            
-                                            // Heart under address
-                                            HStack(spacing: 6) {
-                                                Image(systemName: favoriteIds.contains(listing.id) ? "heart.fill" : "heart")
-                                                    .foregroundStyle(favoriteIds.contains(listing.id) ? .red : .secondary)
-                                                
-                                                if favoriteIds.contains(listing.id) {
-                                                    Text("Saved")
-                                                        .font(.caption)
-                                                        .foregroundStyle(.secondary)
-                                                }
-                                            }
-                                            .contentShape(Rectangle())
-                                            .onTapGesture {
-                                                toggleFavoriteFromRow(listing)
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            
-                            if filteredListings.isEmpty {
-                                ContentUnavailableView(
-                                    "No results",
-                                    systemImage: "magnifyingglass",
-                                    description: Text("Try changing your search or filters.")
-                                )
-                                .listRowSeparator(.hidden)
-                            }
-                            
-                        } header: {
-                            SearchFilterHeader(
-                                searchText: $searchText,
-                                showFilters: $showFilters,
-                                minPrice: $minPrice,
-                                maxPrice: $maxPrice,
-                                selectedCity: $selectedCity,
-                                cityOptions: cityOptions,
-                                resultsCount: filteredListings.count,
-                                isFilteringActive: isFilteringActive,
-                                onClear: clearFilters
-                            )
+            ZStack {
+                AppPageBackground()
+
+                Group {
+                    if vm.isLoading {
+                        ProgressView("Loading listings...")
+                    } else if let msg = vm.errorMessage {
+                        VStack(spacing: 12) {
+                            Text("Error: \(msg)")
+                            Button("Retry") { Task { await vm.loadListings() } }
+                                .buttonStyle(.borderedProminent)
+                                .tint(AppTheme.accent)
                         }
-                    }
-                    .listStyle(.plain)
-                    .refreshable {
-                        await vm.loadListings()
+                        .padding()
+                    } else {
+                        List {
+                            Section {
+                                ForEach(filteredListings) { listing in
+                                    NavigationLink {
+                                        ListingDetailsView(listing: listing)
+                                    } label: {
+                                        ListingCardView(
+                                            listing: listing,
+                                            isFavorite: favoriteIds.contains(listing.id),
+                                            onToggleFavorite: { toggleFavoriteFromRow(listing) }
+                                        )
+                                    }
+                                    .listRowBackground(Color.clear)
+                                    .listRowSeparator(.hidden)
+                                    .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                                }
+
+                                if filteredListings.isEmpty {
+                                    ContentUnavailableView(
+                                        "No results",
+                                        systemImage: "magnifyingglass",
+                                        description: Text("Try changing your search or filters.")
+                                    )
+                                    .listRowBackground(Color.clear)
+                                    .listRowSeparator(.hidden)
+                                }
+
+                            } header: {
+                                SearchFilterHeader(
+                                    searchText: $searchText,
+                                    showFilters: $showFilters,
+                                    minPrice: $minPrice,
+                                    maxPrice: $maxPrice,
+                                    selectedCity: $selectedCity,
+                                    cityOptions: cityOptions,
+                                    resultsCount: filteredListings.count,
+                                    isFilteringActive: isFilteringActive,
+                                    onClear: clearFilters
+                                )
+                                .textCase(nil)
+                            }
+                        }
+                        .listStyle(.plain)
+                        .scrollContentBackground(.hidden)
+                        .refreshable {
+                            await vm.loadListings()
+                        }
                     }
                 }
             }
             .navigationTitle("Listings")
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarBackground(Color.white.opacity(0.8), for: .navigationBar)
             .task {
                 await vm.loadListings()
                 vm.startRealtimeUpdates()

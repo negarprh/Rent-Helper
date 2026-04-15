@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8437A2D62F3AB16E00C5B3CB /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 8437A2D52F3AB16E00C5B3CB /* FirebaseAuth */; };
+		84C3B6502FCAC00100C0D3AA /* StripePaymentSheet in Frameworks */ = {isa = PBXBuildFile; productRef = 84C3B64F2FCAC00100C0D3AA /* StripePaymentSheet */; };
 		84D79E8A2F53879400615DC1 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 84D79E892F53879400615DC1 /* FirebaseFirestore */; };
 /* End PBXBuildFile section */
 
@@ -29,6 +30,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8437A2D62F3AB16E00C5B3CB /* FirebaseAuth in Frameworks */,
+				84C3B6502FCAC00100C0D3AA /* StripePaymentSheet in Frameworks */,
 				84D79E8A2F53879400615DC1 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -81,6 +83,7 @@
 			name = RentHelper;
 			packageProductDependencies = (
 				8437A2D52F3AB16E00C5B3CB /* FirebaseAuth */,
+				84C3B64F2FCAC00100C0D3AA /* StripePaymentSheet */,
 				84D79E892F53879400615DC1 /* FirebaseFirestore */,
 			);
 			productName = RentHelper;
@@ -113,6 +116,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				8437A2D12F3AB10F00C5B3CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				84AADD022F7B6854002D67D3 /* XCRemoteSwiftPackageReference "stripe-ios" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8437A2AE2F3A66AB00C5B3CB /* Products */;
@@ -364,6 +368,14 @@
 				minimumVersion = 12.9.0;
 			};
 		};
+		84AADD022F7B6854002D67D3 /* XCRemoteSwiftPackageReference "stripe-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stripe/stripe-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 25.9.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -371,6 +383,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8437A2D12F3AB10F00C5B3CB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
+		};
+		84C3B64F2FCAC00100C0D3AA /* StripePaymentSheet */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 84AADD022F7B6854002D67D3 /* XCRemoteSwiftPackageReference "stripe-ios" */;
+			productName = StripePaymentSheet;
 		};
 		84D79E892F53879400615DC1 /* FirebaseFirestore */ = {
 			isa = XCSwiftPackageProductDependency;

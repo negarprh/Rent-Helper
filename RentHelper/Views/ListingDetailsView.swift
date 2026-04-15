@@ -5,7 +5,6 @@
 //  Created by Naomi on 2026-02-09.
 //  Edited by Naomi on 2026-03-02
 //
-
 import SwiftUI
 import CoreData
 import FirebaseAuth
@@ -18,99 +17,138 @@ struct ListingDetailsView: View {
     @EnvironmentObject var auth: AuthService
 
     @State private var isFavorite = false
+    @State private var showContactLandlord = false
 
     var body: some View {
+        ZStack {
+            AppPageBackground()
 
-        ScrollView {
+            ScrollView {
 
-            VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: 16) {
 
-                if let urlString = listing.imageUrl,
-                   let url = URL(string: urlString) {
+                    if let urlString = listing.imageUrl,
+                       let url = URL(string: urlString) {
 
-                    AsyncImage(url: url) { phase in
-                        switch phase {
+                        AsyncImage(url: url) { phase in
+                            switch phase {
 
-                        case .empty:
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 14)
-                                    .fill(.ultraThinMaterial)
+                            case .empty:
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 18)
+                                        .fill(.ultraThinMaterial)
 
-                                ProgressView()
+                                    ProgressView()
+                                }
+                                .frame(height: 210)
+                                .padding(.horizontal)
+
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(height: 210)
+                                    .frame(maxWidth: .infinity)
+                                    .clipped()
+                                    .cornerRadius(18)
+                                    .overlay(alignment: .bottomLeading) {
+                                        VStack(alignment: .leading, spacing: 6) {
+                                            Text(listing.price.formatted(.currency(code: "CAD")))
+                                                .font(.headline.weight(.bold))
+                                                .foregroundStyle(.white)
+
+                                            Text(listing.city)
+                                                .font(.caption.weight(.semibold))
+                                                .foregroundStyle(.white.opacity(0.92))
+                                        }
+                                        .padding(12)
+                                        .background(.black.opacity(0.35), in: RoundedRectangle(cornerRadius: 14))
+                                        .padding(12)
+                                    }
+                                    .padding(.horizontal)
+
+                            case .failure:
+                                fallbackImage
+                                    .padding(.horizontal)
+
+                            @unknown default:
+                                EmptyView()
                             }
-                            .frame(height: 230)
-                            .padding(.horizontal)
-
-                        case .success(let image):
-                            image
-                                .resizable()
-                                .scaledToFill()
-                                .frame(height: 230)
-                                .frame(maxWidth: .infinity)
-                                .clipped()
-                                .cornerRadius(14)
-                                .padding(.horizontal)
-
-                        case .failure:
-                            fallbackImage
-                                .padding(.horizontal)
-
-                        @unknown default:
-                            EmptyView()
                         }
-                    }
-
-                } else {
-                    fallbackImage
-                        .padding(.horizontal)
-                }
-
-                VStack(alignment: .leading, spacing: 12) {
-
-                    Text(listing.title)
-                        .font(.title2)
-                        .bold()
-
-                    Text("$\(listing.price, specifier: "%.0f")")
-                        .font(.title3)
-
-                    Text("\(listing.address), \(listing.city)")
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-
-                    Text(listing.description)
-                        .font(.body)
-
-                    if isFavorite {
-
-                        Button {
-                            removeFavorite()
-                        } label: {
-                            Label("Remove Favorite", systemImage: "heart.slash")
-                                .frame(maxWidth: .infinity)
-                        }
-                        .buttonStyle(.bordered)
-                        .tint(.gray)
 
                     } else {
+                        fallbackImage
+                            .padding(.horizontal)
+                    }
+
+                    VStack(alignment: .leading, spacing: 14) {
+
+                        Text(listing.title)
+                            .font(.title2)
+                            .bold()
+                            .lineLimit(2)
+                            .foregroundStyle(AppTheme.textPrimary)
+
+                        Text(listing.price.formatted(.currency(code: "CAD")))
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(AppTheme.accent)
+
+                        Text("\(listing.address), \(listing.city)")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+
+                        Text(listing.description)
+                            .font(.body)
+                            .fixedSize(horizontal: false, vertical: true)
 
                         Button {
-                            saveFavorite()
+                            showContactLandlord = true
                         } label: {
-                            Label("Save to Favorites", systemImage: "heart")
+                            Label("Contact Landlord", systemImage: "message.fill")
                                 .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.borderedProminent)
-                        .tint(.gray)
+                        .tint(AppTheme.accent)
+
+                        if isFavorite {
+
+                            Button {
+                                removeFavorite()
+                            } label: {
+                                Label("Remove Favorite", systemImage: "heart.slash")
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .buttonStyle(.bordered)
+                            .tint(.gray)
+
+                        } else {
+
+                            Button {
+                                saveFavorite()
+                            } label: {
+                                Label("Save to Favorites", systemImage: "heart")
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .tint(.gray)
+                        }
                     }
+                    .padding(16)
+                    .premiumCard(cornerRadius: 20)
+                    .padding(.horizontal)
+                    .padding(.bottom, 24)
                 }
-                .padding(.horizontal)
-                .padding(.bottom, 20)
+                .padding(.top, 10)
             }
-            .padding(.top, 10)
         }
         .navigationTitle("Details")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(.visible, for: .navigationBar)
+        .toolbarBackground(Color.white.opacity(0.85), for: .navigationBar)
+        .navigationDestination(isPresented: $showContactLandlord) {
+            ContactLandlordView(listing: listing)
+        }
         .onAppear {
             checkIfFavorite()
         }
@@ -124,7 +162,7 @@ struct ListingDetailsView: View {
                 .font(.system(size: 44, weight: .semibold))
                 .foregroundColor(.gray)
         }
-        .frame(height: 230)
+        .frame(height: 210)
     }
 
     private func saveFavorite() {
